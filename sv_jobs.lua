@@ -35,12 +35,12 @@ RegisterNetEvent('randol_multijob:server:newJob', function(newJob)
     local result = MySQL.query.await('SELECT * FROM save_jobs WHERE cid = ?', {Player.PlayerData.citizenid})
     for k, v in pairs(result) do
         if newJob.name == v.job then
-           MySQL.query.await('UPDATE save_jobs SET grade = ? WHERE job = ? and cid = ?', {newJob.grade.level, newJob.name, Player.PlayerData.citizenid})
-           hasJob = true
+            MySQL.query.await('UPDATE save_jobs SET grade = ? WHERE job = ? and cid = ?', {newJob.grade.level, newJob.name, Player.PlayerData.citizenid})
+            hasJob = true
         end
     end
     if not hasJob then 
-       MySQL.insert.await('INSERT INTO save_jobs (cid, job, grade) VALUE (?, ?, ?)', {Player.PlayerData.citizenid, newJob.name, newJob.grade.level})
+        MySQL.insert.await('INSERT INTO save_jobs (cid, job, grade) VALUE (?, ?, ?)', {Player.PlayerData.citizenid, newJob.name, newJob.grade.level})
     end
 end)
 
