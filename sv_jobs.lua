@@ -48,7 +48,7 @@ RegisterNetEvent('randol_multijob:server:deleteJob', function(job)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if job == 'unemployed' then QBCore.Functions.Notify(src, 'This job can\'t be removed.', 'error') return end
-    MySQL.query.await('DELETE FROM `save_jobs` WHERE `cid` = ? and `job` = ?', {Player.PlayerData.citizenid, job})
+    MySQL.query.await('DELETE FROM save_jobs WHERE cid = ? and job = ?', {Player.PlayerData.citizenid, job})
     QBCore.Functions.Notify(src, 'You deleted '..QBCore.Shared.Jobs[job].label..' job from your menu.')
     Player.Functions.SetJob('unemployed', 0)
 end)
