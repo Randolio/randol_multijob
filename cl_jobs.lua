@@ -2,35 +2,33 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 RegisterCommand('myjobs', function(source, args)
     local PlayerData = QBCore.Functions.GetPlayerData()
-    local dutyStatus
-    local isDisabled
-    if PlayerData.job.onduty then
-        dutyStatus = 'On Duty'
-        dutyicon = 'fa-solid fa-toggle-on'
-    else
-        dutyStatus = 'Off Duty'
-        dutyicon = 'fa-solid fa-toggle-off'
-    end
-    local jobMenu = { id = 'job_menu', title = 'My Jobs', options = {} }
-    lib.callback('randol_multijob:server:myJobs', false, function(myJobs)
-        if myJobs then
-            jobMenu.options[#jobMenu.options + 1] = {
+    local dutyStatus = PlayerData.job.onduty and 'On Duty' or 'Off Duty'
+    local dutyIcon = PlayerData.job.onduty and 'fa-solid fa-toggle-on' or 'fa-solid fa-toggle-off'
+    local jobMenu = {
+        id = 'job_menu',
+        title = 'My Jobs',
+        options = {
+            {
                 title = 'Toggle Duty',
-                description = 'Current Status: '..dutyStatus,
-                icon = dutyicon,
+                description = 'Current Status: ' .. dutyStatus,
+                icon = dutyIcon,
                 serverEvent = 'QBCore:ToggleDuty',
                 args = {},
-            }
-            for k,v in pairs(myJobs) do
-                if PlayerData.job.name == v.job then isDisabled = true else isDisabled = false end
+            },
+        },
+    }
+    lib.callback('randol_multijob:server:myJobs', false, function(myJobs)
+        if myJobs then
+            for _, job in ipairs(myJobs) do
+                local isDisabled = PlayerData.job.name == job.job
                 jobMenu.options[#jobMenu.options + 1] = {
-                    title = ''..v.jobLabel,
-                    description = 'Grade: '..v.gradeLabel..' ['..tonumber(v.grade)..'] \nSalary: $'..v.salary,
+                    title = job.jobLabel,
+                    description = 'Grade: ' .. job.gradeLabel .. ' [' .. tonumber(job.grade) .. ']\nSalary: $' .. job.salary,
                     icon = 'fa-solid fa-briefcase',
                     arrow = true,
                     disabled = isDisabled,
                     event = 'randol_multijob:client:choiceMenu',
-                    args = {jobLabel = v.jobLabel, job = v.job, grade = v.grade},
+                    args = {jobLabel = job.jobLabel, job = job.job, grade = job.grade},
                 }
             end
             lib.registerContext(jobMenu)
