@@ -4,7 +4,7 @@ game 'gta5'
 author 'Randolio'
 description 'Multi Job'
 
-shared_scripts { '@ox_lib/init.lua', }
+shared_scripts { '@ox_lib/init.lua', 'config.lua'}
 
 client_scripts { 'cl_jobs.lua' }
 
