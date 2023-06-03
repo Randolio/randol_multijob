@@ -1,5 +1,11 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+local function GetJobCount(cid)
+    local result = MySQL.query.await('SELECT COUNT(*) as jobCount FROM save_jobs WHERE cid = ?', {cid})
+    local jobCount = result[1].jobCount
+    return jobCount
+end
+
 lib.callback.register('randol_multijob:server:myJobs', function(source)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
@@ -39,20 +45,24 @@ RegisterNetEvent('randol_multijob:server:newJob', function(newJob)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     local hasJob = false
-    local result = MySQL.query.await('SELECT * FROM save_jobs WHERE cid = ? AND job = ?', {Player.PlayerData.citizenid, newJob.name})
-    if result[1] then
-        MySQL.query.await('UPDATE save_jobs SET grade = ? WHERE job = ? and cid = ?', {newJob.grade.level, newJob.name, Player.PlayerData.citizenid})
+    local cid = Player.PlayerData.citizenid
+    if newJob.name == 'unemployed' then return end
+	local result = MySQL.query.await('SELECT * FROM save_jobs WHERE cid = ? AND job = ?', {cid, newJob.name})
+	if result[1] then
+        MySQL.query.await('UPDATE save_jobs SET grade = ? WHERE job = ? and cid = ?', {newJob.grade.level, newJob.name, cid})
         hasJob = true
-    end
-    if not hasJob then 
-	MySQL.insert.await('INSERT INTO save_jobs (cid, job, grade) VALUE (?, ?, ?)', {Player.PlayerData.citizenid, newJob.name, newJob.grade.level})
-    end
+        return
+	end
+	if not hasJob and GetJobCount(cid) < Config.MaxJobs then 
+		MySQL.insert.await('INSERT INTO save_jobs (cid, job, grade) VALUE (?, ?, ?)', {cid, newJob.name, newJob.grade.level})
+    else
+        return QBCore.Functions.Notify(src, 'You have the max amount of jobs.', 'error')
+	end
 end)
 
 RegisterNetEvent('randol_multijob:server:deleteJob', function(job)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    if job == 'unemployed' then QBCore.Functions.Notify(src, 'This job can\'t be removed.', 'error') return end
     MySQL.query.await('DELETE FROM `save_jobs` WHERE `cid` = ? and `job` = ?', {Player.PlayerData.citizenid, job})
     QBCore.Functions.Notify(src, 'You deleted '..QBCore.Shared.Jobs[job].label..' job from your menu.')
     Player.Functions.SetJob('unemployed', 0)
@@ -61,7 +71,7 @@ end)
 RegisterNetEvent('qb-bossmenu:server:FireEmployee', function(target) -- Removes job when fired from qb-bossmenu.
     local Employee = QBCore.Functions.GetPlayerByCitizenId(target)
     if Employee then
-	local oldJob = Employee.PlayerData.job.name
+		local oldJob = Employee.PlayerData.job.name
         MySQL.query.await('DELETE FROM save_jobs WHERE cid = ? AND job = ?', {Employee.PlayerData.citizenid, oldJob})
     end
 end)
