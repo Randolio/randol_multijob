@@ -12,7 +12,7 @@ RegisterCommand('myjobs', function(source, args)
                 title = 'Toggle Duty',
                 description = 'Current Status: ' .. dutyStatus,
                 icon = dutyIcon,
-                serverEvent = 'QBCore:ToggleDuty',
+                event = 'randol_multijob:client:toggleDuty',
                 args = {},
             },
         },
@@ -24,7 +24,7 @@ RegisterCommand('myjobs', function(source, args)
                 jobMenu.options[#jobMenu.options + 1] = {
                     title = job.jobLabel,
                     description = 'Grade: ' .. job.gradeLabel .. ' [' .. tonumber(job.grade) .. ']\nSalary: $' .. job.salary,
-                    icon = 'fa-solid fa-briefcase',
+                    icon = Config.JobIcons[job.job] or 'fa-solid fa-briefcase',
                     arrow = true,
                     disabled = isDisabled,
                     event = 'randol_multijob:client:choiceMenu',
@@ -67,10 +67,20 @@ end)
 
 AddEventHandler('randol_multijob:client:changeJob', function(args)
     TriggerServerEvent('randol_multijob:server:changeJob', args.job, args.grade)
+    Wait(100)
+    ExecuteCommand('myjobs')
 end)
 
 AddEventHandler('randol_multijob:client:deleteJob', function(args)
     TriggerServerEvent('randol_multijob:server:deleteJob', args.job)
+    Wait(100)
+    ExecuteCommand('myjobs')
+end)
+
+AddEventHandler('randol_multijob:client:toggleDuty', function()
+    TriggerServerEvent('QBCore:ToggleDuty')
+    Wait(500)
+    ExecuteCommand('myjobs')
 end)
 
 RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
