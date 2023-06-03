@@ -47,8 +47,8 @@ RegisterNetEvent('randol_multijob:server:newJob', function(newJob)
     local hasJob = false
     local cid = Player.PlayerData.citizenid
     if newJob.name == 'unemployed' then return end
-	local result = MySQL.query.await('SELECT * FROM save_jobs WHERE cid = ? AND job = ?', {cid, newJob.name})
-	if result[1] then
+    local result = MySQL.query.await('SELECT * FROM save_jobs WHERE cid = ? AND job = ?', {cid, newJob.name}) 
+    if result[1] then
         MySQL.query.await('UPDATE save_jobs SET grade = ? WHERE job = ? and cid = ?', {newJob.grade.level, newJob.name, cid})
         hasJob = true
         return
