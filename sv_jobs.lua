@@ -85,3 +85,35 @@ RegisterNetEvent('qb-bossmenu:server:FireEmployee', function(target) -- Removes 
 	end
     end
 end)
+
+local function adminRemoveJob(src, id, job)
+    local Player = QBCore.Functions.GetPlayer(id)
+    local cid = Player.PlayerData.citizenid
+    local result = MySQL.query.await('SELECT * FROM save_jobs WHERE cid = ? AND job = ?', {cid, job})
+    if result[1] then
+        MySQL.query.await('DELETE FROM save_jobs WHERE cid = ? AND job = ?', {cid, job})
+        QBCore.Functions.Notify(src, ('Job: %s was removed from ID: %s'):format(job, id), 'success')
+        if Player.PlayerData.job.name == job then
+            Player.Functions.SetJob('unemployed', 0)
+        end
+    else
+        QBCore.Functions.Notify(src, 'Player doesn\'t have this job?', 'error')
+    end
+end
+
+QBCore.Commands.Add('removejob', "Remove a job from the player's multijob.", { { name = 'id', help = 'ID of the player' }, { name = 'job', help = 'Name of Job' } }, true, function(source, args)
+    local src = source
+    if not args[1] then 
+        QBCore.Functions.Notify(src, 'Must provide a player id.', 'error') 
+        return 
+    end
+    if not args[2] then 
+        QBCore.Functions.Notify(src, 'Must provide the name of the job to remove from the player.', 'error') 
+        return 
+    end
+    local id = tonumber(args[1])
+    local Player = QBCore.Functions.GetPlayer(id)
+    if not Player then QBCore.Functions.Notify(src, 'Player not online.', 'error') return end
+
+    adminRemoveJob(src, id, args[2])
+end, 'admin')
