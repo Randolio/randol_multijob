@@ -6,6 +6,17 @@ local function GetJobCount(cid)
     return jobCount
 end
 
+local function CanSetJob(cid, jobName)
+    local jobs = MySQL.query.await('SELECT job FROM save_jobs WHERE cid = ? ', {cid})
+    if not jobs then return false end
+    for i = 1, #jobs do
+        if jobs[i].job == jobName then
+            return true
+        end
+    end
+    return false
+end
+
 lib.callback.register('randol_multijob:server:myJobs', function(source)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
@@ -30,10 +41,24 @@ end)
 RegisterNetEvent('randol_multijob:server:changeJob', function(job, grade)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    if Player.PlayerData.job.name == job then QBCore.Functions.Notify(src, 'Your current job is already set to this.', 'error') return end
+
+    if Player.PlayerData.job.name == job then 
+        QBCore.Functions.Notify(src, 'Your current job is already set to this.', 'error') 
+        return 
+    end
 
     local jobInfo = QBCore.Shared.Jobs[job]
-    if not jobInfo then QBCore.Functions.Notify(src, 'Invalid job.', 'error') return end
+    if not jobInfo then 
+        QBCore.Functions.Notify(src, 'Invalid job.', 'error') 
+        return 
+    end
+
+    local cid = Player.PlayerData.citizenid
+    local canSet = CanSetJob(cid, job)
+    
+    if not canSet then 
+        return 
+    end
 
     Player.Functions.SetJob(job, grade)
     Player.Functions.SetJobDuty(false)
