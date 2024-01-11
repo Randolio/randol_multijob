@@ -25,7 +25,7 @@ lib.callback.register('randol_multijob:server:myJobs', function(source)
     for k, v in pairs(result) do
         local job = QBCore.Shared.Jobs[v.job]
         if job then
-            local grade = job.grades[tostring(v.grade)]
+            local grade = (Config.Framework == 'qb' and job.grades[tostring(v.grade)]) or job.grades[tonumber(v.grade)]
             storeJobs[#storeJobs + 1] = {
                 job = v.job,
                 salary = grade.payment,
