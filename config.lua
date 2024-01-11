@@ -1,5 +1,7 @@
 Config = {}
 
+Config.Framework = 'qb' -- 'qb' or 'qbx' to handle job grades differently.
+
 Config.MaxJobs = 5
 
 Config.JobIcons = {
