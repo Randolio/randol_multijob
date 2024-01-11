@@ -1,5 +1,5 @@
 # randol_multijob
-A multi-job for QBCore using ox_lib. [https://github.com/overextended/ox_lib/releases/tag/v3.1.4]
+A multi-job for QBCore/QBOX using ox_lib. [https://github.com/overextended/ox_lib/releases/tag/v3.1.4]
 
 Run the SQL in your database and restart your server. You'll have to set player's jobs again for them to appear on their job menu. 
 Default key to open is F10 or use /myjobs
