@@ -1,15 +1,31 @@
 # randol_multijob
-A multi-job for QBCore/QBOX using ox_lib. [https://github.com/overextended/ox_lib/releases/tag/v3.1.4]
 
-Run the SQL in your database and restart your server. You'll have to set player's jobs again for them to appear on their job menu. 
-Default key to open is F10 or use /myjobs
+A multi job script for QBCore/QBox using [**ox_lib**](https://github.com/overextended/ox_lib/releases/tag/v3.1.4)
+
 
 Firing someone from qb-management boss menu will delete the job from the menu :)
 
 # QBOX Support
 
-For QBOX, you should replace the fire employee functions in server/main.lua with these. This should remove the jobs from the multijob upon firing. Make sure Config.Framework is set to 'qbx' for grade handling.
+**1 For qbox users, head to :**
+
+- ``qbx_management/server/main`` and replace the fire employee functions
+
+**2 make sure you set qbx in config lua :**
+
+- ``Config.Framework = 'qbx'``
+
+**3 Run the SQL in your database and restart your server**
+
+- Default keybind to open is **F10** or use command **/myjobs**
+
 ```lua
+-- Function to fire an online player from a given group
+-- Should be merged with the offline player function once an export from the core is available
+---@param source integer
+---@param employee Player Player object of player being fired
+---@param player Player Player object of player initiating firing action
+---@param groupType GroupType
 local function fireOnlineEmployee(source, employee, player, groupType)
     if employee.PlayerData.citizenid == player.PlayerData.citizenid then
         local message = groupType == 'gang' and locale('error.kick_yourself') or locale('error.fire_yourself')
