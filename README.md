@@ -8,7 +8,7 @@ Firing someone from qb-management boss menu will delete the job from the menu :)
 
 # QBOX Support
 
-For QBOX, you should replace the fire employee functions in server/main.lua with these. This should remove the jobs from the multijob upon firing.
+For QBOX, you should replace the fire employee functions in server/main.lua with these. This should remove the jobs from the multijob upon firing. Make sure Config.Framework is set to 'qbx' for grade handling.
 ```lua
 local function fireOnlineEmployee(source, employee, player, groupType)
     if employee.PlayerData.citizenid == player.PlayerData.citizenid then
