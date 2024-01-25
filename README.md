@@ -3,19 +3,19 @@
 A multi job script for QBCore/QBox using [**ox_lib**](https://github.com/overextended/ox_lib/releases/tag/v3.1.4)
 
 
-Firing someone from qb-management boss menu will delete the job from the menu :)
+Firing someone from qb-management boss menu will delete the job from the menu.
 
 # QBOX Support
 
-**1 For qbox users, head to :**
+**1) For qbox users, head to :**
 
-- ``qbx_management/server/main`` and replace the fire employee functions
+- ``qbx_management/server/main`` and replace the fire employee functions listed below.
 
-**2 make sure you set qbx in config lua :**
+**2) make sure you set qbx in config lua :**
 
 - ``Config.Framework = 'qbx'``
 
-**3 Run the SQL in your database and restart your server**
+**3) Run the SQL in your database and restart your server**
 
 - Default keybind to open is **F10** or use command **/myjobs**
 
