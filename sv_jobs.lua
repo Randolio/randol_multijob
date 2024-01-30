@@ -24,16 +24,24 @@ lib.callback.register('randol_multijob:server:myJobs', function(source)
     local result = MySQL.query.await('SELECT * FROM save_jobs WHERE cid = ?', {Player.PlayerData.citizenid})
     for k, v in pairs(result) do
         local job = QBCore.Shared.Jobs[v.job]
-        if job then
-            local grade = (Config.Framework == 'qb' and job.grades[tostring(v.grade)]) or job.grades[tonumber(v.grade)]
-            storeJobs[#storeJobs + 1] = {
-                job = v.job,
-                salary = grade.payment,
-                jobLabel = job.label,
-                gradeLabel = grade.name,
-                grade = v.grade,
-            }
+
+        if not job then 
+            return error(('MISSING JOB FROM jobs.lua: "%s".'): format(v.job)) 
         end
+        
+        local grade = (Config.Framework == 'qb' and job.grades[tostring(v.grade)]) or job.grades[tonumber(v.grade)]
+
+        if not grade then 
+            return error(('MISSING JOB GRADE for "%s". GRADE MISSING: %s'): format(v.job, v.grade)) 
+        end
+
+        storeJobs[#storeJobs + 1] = {
+            job = v.job,
+            salary = grade.payment,
+            jobLabel = job.label,
+            gradeLabel = grade.name,
+            grade = v.grade,
+        }
     end
     return storeJobs
 end)
