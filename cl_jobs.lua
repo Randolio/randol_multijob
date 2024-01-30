@@ -4,6 +4,7 @@ RegisterCommand('myjobs', function(source, args)
     local PlayerData = QBCore.Functions.GetPlayerData()
     local dutyStatus = PlayerData.job.onduty and 'On Duty' or 'Off Duty'
     local dutyIcon = PlayerData.job.onduty and 'fa-solid fa-toggle-on' or 'fa-solid fa-toggle-off'
+    local colorIcon = PlayerData.job.onduty and '#5ff5b4' or 'red'
     local jobMenu = {
         id = 'job_menu',
         title = 'My Jobs',
@@ -12,6 +13,7 @@ RegisterCommand('myjobs', function(source, args)
                 title = 'Toggle Duty',
                 description = 'Current Status: ' .. dutyStatus,
                 icon = dutyIcon,
+                iconColor = colorIcon,
                 event = 'randol_multijob:client:toggleDuty',
                 args = {},
             },
