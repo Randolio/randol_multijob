@@ -26,13 +26,13 @@ lib.callback.register('randol_multijob:server:myJobs', function(source)
         local job = QBCore.Shared.Jobs[v.job]
 
         if not job then 
-            return error(('MISSING JOB FROM jobs.lua: "%s".'): format(v.job)) 
+            return error(('MISSING JOB FROM jobs.lua: "%s" | CITIZEN ID: %s'): format(v.job, Player.PlayerData.citizenid)) 
         end
         
         local grade = (Config.Framework == 'qb' and job.grades[tostring(v.grade)]) or job.grades[tonumber(v.grade)]
 
         if not grade then 
-            return error(('MISSING JOB GRADE for "%s". GRADE MISSING: %s'): format(v.job, v.grade)) 
+            return error(('MISSING JOB GRADE for "%s". GRADE MISSING: %s | CITIZEN ID: %s'): format(v.job, v.grade, Player.PlayerData.citizenid)) 
         end
 
         storeJobs[#storeJobs + 1] = {
