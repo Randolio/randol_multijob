@@ -5,11 +5,11 @@ A multi job script for QBCore/QBox using [**ox_lib**](https://github.com/overext
 ![Front Menu](https://i.imgur.com/GuCXPhK.png)
 ![Choice Menu](https://i.imgur.com/bcIgTp3.png)
 
-# QBOX Support
+# QBOX Support -- With the qbx_management commit on Mar 1, 2024.. this should now work.
 
 **1) For qbox users, head to :**
 
-- ``qbx_management/server/main`` and replace the fireEmployee function listed below.
+- ``qbx_management/server/main`` and replace the fireEmployee function with the one listed below.
 ```lua
 local function fireEmployee(employeeCitizenId, boss, groupName, groupType)
     local employee = exports.qbx_core:GetPlayerByCitizenId(employeeCitizenId) or exports.qbx_core:GetOfflinePlayer(employeeCitizenId)
