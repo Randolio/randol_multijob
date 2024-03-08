@@ -1,7 +1,7 @@
 local Config = lib.require('config')
 
 local function showMultijob()
-    local PlayerData = QBCore.Functions.GetPlayerData()
+    local PlayerData = QBX.PlayerData
     local dutyStatus = PlayerData.job.onduty and 'On Duty' or 'Off Duty'
     local dutyIcon = PlayerData.job.onduty and 'fa-solid fa-toggle-on' or 'fa-solid fa-toggle-off'
     local colorIcon = PlayerData.job.onduty and '#5ff5b4' or 'red'
@@ -17,28 +17,27 @@ local function showMultijob()
                 onSelect = function()
                     TriggerServerEvent('QBCore:ToggleDuty')
                     Wait(500)
-                    ExecuteCommand('myjobs')
+                    showMultijob()
                 end,
             },
         },
     }
-    local myJobs = lib.callback.await('randol_multijob:server:myJobs', false)
-    if myJobs then
-        for _, job in ipairs(myJobs) do
-            local isDisabled = PlayerData.job.name == job.job
-            jobMenu.options[#jobMenu.options + 1] = {
-                title = job.jobLabel,
-                description = ('Grade: %s [%s]\nSalary: $%s'):format(job.gradeLabel, tonumber(job.grade), job.salary),
-                icon = Config.JobIcons[job.job] or 'fa-solid fa-briefcase',
-                arrow = true,
-                disabled = isDisabled,
-                event = 'randol_multijob:client:choiceMenu',
-                args = {jobLabel = job.jobLabel, job = job.job, grade = job.grade},
-            }
-        end
-        lib.registerContext(jobMenu)
-        lib.showContext('job_menu')
+
+    for job, grade in pairs(PlayerData.jobs) do
+        local isDisabled = PlayerData.job.name == job
+        local data = sharedJobs[job]
+        jobMenu.options[#jobMenu.options + 1] = {
+            title = data.label,
+            description = ('Grade: %s [%s]\nSalary: $%s'):format(data.grades[grade].name, grade, data.grades[grade].payment),
+            icon = Config.JobIcons[job] or 'fa-solid fa-briefcase',
+            arrow = true,
+            disabled = isDisabled,
+            event = 'randol_multijob:client:choiceMenu',
+            args = {jobLabel = data.label, job = job, grade = grade},
+        }
     end
+    lib.registerContext(jobMenu)
+    lib.showContext('job_menu')
 end
 
 AddEventHandler('randol_multijob:client:choiceMenu', function(args)
@@ -52,9 +51,9 @@ AddEventHandler('randol_multijob:client:choiceMenu', function(args)
                 description = ('Switch your job to: %s'):format(args.jobLabel),
                 icon = 'fa-solid fa-circle-check',
                 onSelect = function()
-                    TriggerServerEvent('randol_multijob:server:changeJob', args.job, args.grade)
+                    TriggerServerEvent('randol_multijob:server:changeJob', args.job)
                     Wait(100)
-                    ExecuteCommand('myjobs')
+                    showMultijob()
                 end,
             },
             {
@@ -64,17 +63,13 @@ AddEventHandler('randol_multijob:client:choiceMenu', function(args)
                 onSelect = function()
                     TriggerServerEvent('randol_multijob:server:deleteJob', args.job)
                     Wait(100)
-                    ExecuteCommand('myjobs')
+                    showMultijob()
                 end,
             },
         }
     }
     lib.registerContext(displayChoices)
     lib.showContext('choice_menu')
-end)
-
-RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
-    TriggerServerEvent('randol_multijob:server:newJob', JobInfo)
 end)
 
 lib.addKeybind({

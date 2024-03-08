@@ -1,4 +1,5 @@
-QBCore = exports['qb-core']:GetCoreObject()
+qbx = exports.qbx_core
+sharedJobs = qbx:GetJobs()
 
 return {
     MaxJobs = 5,

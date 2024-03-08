@@ -6,7 +6,7 @@ description 'Multi Job'
 
 shared_scripts { '@ox_lib/init.lua', 'config.lua'}
 
-client_scripts { 'cl_jobs.lua' }
+client_scripts { 'cl_jobs.lua', '@qbx_core/modules/playerdata.lua' }
 
 server_scripts { '@oxmysql/lib/MySQL.lua', 'sv_jobs.lua' }
 
