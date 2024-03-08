@@ -1,6 +1,7 @@
 local Config = lib.require('config')
 
 local function showMultijob()
+    local sharedJobs = qbx:GetJobs()
     local PlayerData = QBX.PlayerData
     local dutyStatus = PlayerData.job.onduty and 'On Duty' or 'Off Duty'
     local dutyIcon = PlayerData.job.onduty and 'fa-solid fa-toggle-on' or 'fa-solid fa-toggle-off'
