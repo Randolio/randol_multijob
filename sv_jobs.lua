@@ -18,7 +18,7 @@ RegisterNetEvent('randol_multijob:server:changeJob', function(job)
         qbx:Notify(src, 'Your current job is already set to this.', 'error') 
         return 
     end
-
+    local sharedJobs = qbx:GetJobs()
     local jobInfo = sharedJobs[job]
     if not jobInfo then 
         qbx:Notify(src, 'Invalid job.', 'error') 
@@ -38,6 +38,7 @@ end)
 RegisterNetEvent('randol_multijob:server:deleteJob', function(job)
     local src = source
     local player = qbx:GetPlayer(src)
+    local sharedJobs = qbx:GetJobs()
     qbx:RemovePlayerFromJob(player.PlayerData.citizenid, job)
     qbx:Notify(src, ('You deleted %s job from your menu.'):format(sharedJobs[job].label))
 end)
