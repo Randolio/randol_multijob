@@ -23,7 +23,7 @@ local function showMultijob()
         },
     }
     local myJobs = lib.callback.await('randol_multijob:server:myJobs', false)
-    if next(myJobs) then
+    if myJobs then
         for _, job in ipairs(myJobs) do
             local isDisabled = PlayerData.job.name == job.job
             jobMenu.options[#jobMenu.options + 1] = {
@@ -77,5 +77,11 @@ RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     TriggerServerEvent('randol_multijob:server:newJob', JobInfo)
 end)
 
-RegisterCommand('myjobs', showMultijob, false)
-RegisterKeyMapping('myjobs', 'Multi Job', 'keyboard', 'F10')
+lib.addKeybind({
+    name = 'myjobs',
+    description = 'Multi Job',
+    defaultKey = 'F10',
+    onPressed = function(self)
+        showMultijob()
+    end
+})

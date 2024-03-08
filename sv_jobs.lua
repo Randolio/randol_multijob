@@ -87,7 +87,7 @@ RegisterNetEvent('randol_multijob:server:newJob', function(newJob)
         return
     end
     if not hasJob and GetJobCount(cid) < Config.MaxJobs then 
-	MySQL.insert.await('INSERT INTO save_jobs (cid, job, grade) VALUE (?, ?, ?)', {cid, newJob.name, newJob.grade.level})
+        MySQL.insert.await('INSERT INTO save_jobs (cid, job, grade) VALUE (?, ?, ?)', {cid, newJob.name, newJob.grade.level})
     else
         return QBCore.Functions.Notify(src, 'You have the max amount of jobs.', 'error')
     end
@@ -106,16 +106,16 @@ RegisterNetEvent('qb-bossmenu:server:FireEmployee', function(target) -- Removes 
     local Player = QBCore.Functions.GetPlayer(src)
     local Employee = QBCore.Functions.GetPlayerByCitizenId(target)
     if Employee then
-	local oldJob = Employee.PlayerData.job.name
+        local oldJob = Employee.PlayerData.job.name
         MySQL.query.await('DELETE FROM save_jobs WHERE cid = ? AND job = ?', {Employee.PlayerData.citizenid, oldJob})
     else
         local player = MySQL.query.await('SELECT * FROM players WHERE citizenid = ? LIMIT 1', { target })
-	if player[1] then
-		Employee = player[1]
-		Employee.job = json.decode(Employee.job)
-		if Employee.job.grade.level > Player.PlayerData.job.grade.level then return end
-		MySQL.query.await('DELETE FROM save_jobs WHERE cid = ? AND job = ?', {target, Employee.job.name})
-	end
+        if player[1] then
+            Employee = player[1]
+            Employee.job = json.decode(Employee.job)
+            if Employee.job.grade.level > Player.PlayerData.job.grade.level then return end
+            MySQL.query.await('DELETE FROM save_jobs WHERE cid = ? AND job = ?', {target, Employee.job.name})
+        end
     end
 end)
 
