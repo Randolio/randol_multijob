@@ -150,3 +150,14 @@ QBCore.Commands.Add('removejob', "Remove a job from the player's multijob.", { {
 
     adminRemoveJob(src, id, args[2])
 end, 'admin')
+
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    MySQL.query([=[
+        CREATE TABLE IF NOT EXISTS `save_jobs` (
+            `cid` VARCHAR(100) NOT NULL,
+            `job` VARCHAR(100) NOT NULL,
+            `grade` INT(11) NOT NULL
+        );
+    ]=])
+end)
