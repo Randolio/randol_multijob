@@ -29,7 +29,7 @@ lib.callback.register('randol_multijob:server:myJobs', function(source)
             return error(('MISSING JOB FROM jobs.lua: "%s" | CITIZEN ID: %s'): format(v.job, Player.PlayerData.citizenid)) 
         end
         
-        local grade = job.grades[tostring(v.grade)])
+        local grade = job.grades[tostring(v.grade)]
 
         if not grade then 
             return error(('MISSING JOB GRADE for "%s". GRADE MISSING: %s | CITIZEN ID: %s'): format(v.job, v.grade, Player.PlayerData.citizenid)) 
