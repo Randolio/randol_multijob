@@ -1,7 +1,6 @@
 qbx = exports.qbx_core
 
 return {
-    MaxJobs = 5,
     JobIcons = {
         ['police'] = 'fa-solid fa-shield',
         ['ambulance'] = 'fa-solid fa-user-doctor',
@@ -17,5 +16,8 @@ return {
         ['taxi'] = 'fa-solid fa-taxi',
         ['vineyard'] = 'fa-solid fa-wine-bottle',
         ['hotdog'] = 'fa-solid fa-hotdog',
+    },
+    GangIcons = {
+       ['vagos'] = 'fa-solid fa-user-ninja',
     }
 }
