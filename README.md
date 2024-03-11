@@ -5,8 +5,8 @@ A multi management script for qbox using [**ox_lib**](https://github.com/overext
 * Default keybind to open is **F10**.
 * Now supports multi-gang management too.
 
-![Front Menu](https://i.imgur.com/I7YUOE6.png)
 ![View Jobs](https://i.imgur.com/R5ln3nt.png)
+![Front Menu](https://i.imgur.com/I7YUOE6.png)
 ![View Gangs](https://i.imgur.com/Qxfv7fD.png)
 
 **Note*: Make sure your qbx_core is up to date to the point where you see these 4 at the top of your qbx_core/server/player.lua:
