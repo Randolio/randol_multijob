@@ -9,7 +9,7 @@ A multi management script for qbox using [**ox_lib**](https://github.com/overext
 ![Front Menu](https://i.imgur.com/I7YUOE6.png)
 ![View Gangs](https://i.imgur.com/Qxfv7fD.png)
 
-**Note*: Make sure your qbx_core is up to date to the point where you see these 4 at the top of your qbx_core/server/player.lua:
+**Note**: Make sure your qbx_core is up to date to the point where you see these 4 at the top of your qbx_core/server/player.lua:
 
 ```lua
 local maxJobsPerPlayer = GetConvarInt('qbx:max_jobs_per_player', 1)
