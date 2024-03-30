@@ -7,11 +7,11 @@ local function GetJobCount(cid)
 end
 
 local function CanSetJob(cid, jobName)
-    local jobs = MySQL.query.await('SELECT job FROM save_jobs WHERE cid = ? ', {cid})
+    local jobs = MySQL.query.await('SELECT job, grade FROM save_jobs WHERE cid = ? ', {cid})
     if not jobs then return false end
     for i = 1, #jobs do
         if jobs[i].job == jobName then
-            return true
+            return true, jobs[i].grade
         end
     end
     return false
@@ -46,7 +46,7 @@ lib.callback.register('randol_multijob:server:myJobs', function(source)
     return storeJobs
 end)
 
-RegisterNetEvent('randol_multijob:server:changeJob', function(job, grade)
+RegisterNetEvent('randol_multijob:server:changeJob', function(job)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
 
@@ -62,7 +62,7 @@ RegisterNetEvent('randol_multijob:server:changeJob', function(job, grade)
     end
 
     local cid = Player.PlayerData.citizenid
-    local canSet = CanSetJob(cid, job)
+    local canSet, grade = CanSetJob(cid, job)
     
     if not canSet then 
         return 
@@ -98,7 +98,9 @@ RegisterNetEvent('randol_multijob:server:deleteJob', function(job)
     local Player = QBCore.Functions.GetPlayer(src)
     MySQL.query.await('DELETE FROM save_jobs WHERE cid = ? and job = ?', {Player.PlayerData.citizenid, job})
     QBCore.Functions.Notify(src, 'You deleted '..QBCore.Shared.Jobs[job].label..' job from your menu.')
-    Player.Functions.SetJob('unemployed', 0)
+    if Player.PlayerData.job.name == job then
+        Player.Functions.SetJob('unemployed', 0)
+    end
 end)
 
 RegisterNetEvent('qb-bossmenu:server:FireEmployee', function(target) -- Removes job when fired from qb-bossmenu.
@@ -157,7 +159,8 @@ AddEventHandler('onResourceStart', function(resource)
         CREATE TABLE IF NOT EXISTS `save_jobs` (
             `cid` VARCHAR(100) NOT NULL,
             `job` VARCHAR(100) NOT NULL,
-            `grade` INT(11) NOT NULL
+            `grade` INT(11) NOT NULL,
+            UNIQUE KEY `cid_job` (`cid`,`job`)
         );
     ]=])
 end)

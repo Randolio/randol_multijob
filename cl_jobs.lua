@@ -52,7 +52,7 @@ AddEventHandler('randol_multijob:client:choiceMenu', function(args)
                 description = ('Switch your job to: %s'):format(args.jobLabel),
                 icon = 'fa-solid fa-circle-check',
                 onSelect = function()
-                    TriggerServerEvent('randol_multijob:server:changeJob', args.job, args.grade)
+                    TriggerServerEvent('randol_multijob:server:changeJob', args.job)
                     Wait(100)
                     ExecuteCommand('myjobs')
                 end,
