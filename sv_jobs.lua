@@ -159,8 +159,7 @@ AddEventHandler('onResourceStart', function(resource)
         CREATE TABLE IF NOT EXISTS `save_jobs` (
             `cid` VARCHAR(100) NOT NULL,
             `job` VARCHAR(100) NOT NULL,
-            `grade` INT(11) NOT NULL,
-            UNIQUE KEY `cid_job` (`cid`,`job`)
+            `grade` INT(11) NOT NULL
         );
     ]=])
 end)
