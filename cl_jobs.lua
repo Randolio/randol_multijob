@@ -17,7 +17,7 @@ local function showMultijob()
                 onSelect = function()
                     TriggerServerEvent('QBCore:ToggleDuty')
                     Wait(500)
-                    ExecuteCommand('myjobs')
+                    showMultijob()
                 end,
             },
         },
@@ -54,7 +54,7 @@ AddEventHandler('randol_multijob:client:choiceMenu', function(args)
                 onSelect = function()
                     TriggerServerEvent('randol_multijob:server:changeJob', args.job)
                     Wait(100)
-                    ExecuteCommand('myjobs')
+                    showMultijob()
                 end,
             },
             {
@@ -64,7 +64,7 @@ AddEventHandler('randol_multijob:client:choiceMenu', function(args)
                 onSelect = function()
                     TriggerServerEvent('randol_multijob:server:deleteJob', args.job)
                     Wait(100)
-                    ExecuteCommand('myjobs')
+                    showMultijob()
                 end,
             },
         }
